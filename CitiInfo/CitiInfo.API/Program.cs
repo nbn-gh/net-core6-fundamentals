@@ -18,8 +18,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Marks the position in the middleware pipeline where a routing decision is made
+app.UseRouting();
+
 app.UseAuthorization();
 
-app.MapControllers();
+// Marks the position in the middleware pipeline where the selected endpoint is executed
+// Here we are using the attribute routing
+app.UseEndpoints(endpoints => { 
+    endpoints.MapControllers(); 
+});
 
 app.Run();
