@@ -87,7 +87,7 @@ namespace CitiInfo.API.Controllers
             // find point of interest
             var pointOfInterestFromStore = cityInfo.PointsOfInterest
                 .FirstOrDefault(p => p.Id == pointOfInterestId);
-            if(pointOfInterestFromStore == null)
+            if (pointOfInterestFromStore == null)
             {
                 return NotFound();
             }
@@ -130,12 +130,38 @@ namespace CitiInfo.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!TryValidateModel(pointOfInterestToPatch)){
+            if (!TryValidateModel(pointOfInterestToPatch)) {
                 return BadRequest(ModelState);
             }
 
             return NoContent();
         }
+
+        [HttpDelete("{pointOfInterestId}")]
+        public ActionResult DeletePointOfAction(int cityId, int pointOfInterestId)
+        {
+            var cityInfo = CitiesDataStore.Current.Cities
+                         .FirstOrDefault(c => c.Id == cityId);
+
+            if (cityInfo == null)
+            {
+                return NotFound();
+            }
+
+            // find point of interest
+            var pointOfInterestFromStore = cityInfo.PointsOfInterest
+                .FirstOrDefault(p => p.Id == pointOfInterestId);
+            if (pointOfInterestFromStore == null)
+            {
+                return NotFound();
+            }
+
+            cityInfo.PointsOfInterest.Remove(pointOfInterestFromStore);
+
+            return NoContent();
+
+        }
+
 
 
     }
