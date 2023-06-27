@@ -17,7 +17,8 @@ namespace CitiInfo.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<CityDto> GetCity(int id)
         {
-            var cityInfo = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
+            var cityInfo = CitiesDataStore.Current.Cities
+                .FirstOrDefault(c => c.Id == id);
             
             if(cityInfo == null)
             {
