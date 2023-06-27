@@ -1,0 +1,1 @@
+# net-core6-fundamentals
