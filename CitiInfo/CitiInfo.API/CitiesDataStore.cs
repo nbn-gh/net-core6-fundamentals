@@ -7,7 +7,7 @@ namespace CitiInfo.API
         public List<CityDto> Cities { get; set; }
 
         // Added the static property to retrun this class. this is part of singleton pattern network
-        public static CitiesDataStore Current { get; } = new CitiesDataStore();
+        // public static CitiesDataStore Current { get; } = new CitiesDataStore();
 
         public CitiesDataStore()
         {

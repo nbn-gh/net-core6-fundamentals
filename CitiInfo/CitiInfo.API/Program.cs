@@ -1,3 +1,5 @@
+using CitiInfo.API;
+using CitiInfo.API.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
 
@@ -30,6 +32,14 @@ builder.Services.AddSwaggerGen();
 
 // for supporting file type
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
+
+#if DEBUG
+builder.Services.AddTransient<IMailService, LocalMailService>();
+#else
+builder.Services.AddTransient<IMailService, CloudMailService>();
+#endif
+
+builder.Services.AddSingleton<CitiesDataStore>();
 
 var app = builder.Build();
 
