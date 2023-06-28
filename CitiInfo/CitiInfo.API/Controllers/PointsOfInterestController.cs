@@ -9,6 +9,13 @@ namespace CitiInfo.API.Controllers
     [ApiController]
     public class PointsOfInterestController : ControllerBase
     {
+        private readonly ILogger<PointsOfInterestController> _logger;
+
+        public PointsOfInterestController(ILogger<PointsOfInterestController> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<PointOfInterestDto>> GetPointsOfInterest(int cityId)
         {
@@ -17,6 +24,7 @@ namespace CitiInfo.API.Controllers
 
             if (cityInfo == null)
             {
+                _logger.LogInformation($"City with cityId {cityId} wasn't found when accessing points of interest.");
                 return NotFound();
             }
 
@@ -133,7 +141,6 @@ namespace CitiInfo.API.Controllers
             if (!TryValidateModel(pointOfInterestToPatch)) {
                 return BadRequest(ModelState);
             }
-
             return NoContent();
         }
 
@@ -157,9 +164,7 @@ namespace CitiInfo.API.Controllers
             }
 
             cityInfo.PointsOfInterest.Remove(pointOfInterestFromStore);
-
             return NoContent();
-
         }
 
 
