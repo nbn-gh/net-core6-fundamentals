@@ -1,4 +1,5 @@
 ﻿using CitiInfo.API.Models;
+using CitiInfo.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 
@@ -8,32 +9,46 @@ namespace CitiInfo.API.Controllers
     [Route("api/cities")]
     public class CitiesController : ControllerBase
     {
-        private readonly CitiesDataStore _citiesDataStore;
+        private readonly ICityInfoRepository _cityInfoRepository;
 
-        public CitiesController(CitiesDataStore citiesDataStore)
+        public CitiesController(ICityInfoRepository cityInfoRepository )
         {
-            _citiesDataStore = citiesDataStore ?? throw new ArgumentNullException(nameof(citiesDataStore));
+            _cityInfoRepository = cityInfoRepository ?? throw new ArgumentNullException(nameof(cityInfoRepository));
         }
 
 
         [HttpGet]
-        public ActionResult<IEnumerable<CityDto>> GetCities()
+        public async Task<ActionResult<IEnumerable<CityWithoutPointsOnInterestDto>>> GetCities()
         {
-            return Ok(_citiesDataStore.Cities);
+            var citiEntities = await _cityInfoRepository.GetCitiesAsync();
+            var results = new List<CityWithoutPointsOnInterestDto>();
+            foreach (var citiEntity in citiEntities)
+            {
+                results.Add(new CityWithoutPointsOnInterestDto
+                {
+                    Id = citiEntity.Id,
+                    Description = citiEntity.Description,
+                    Name = citiEntity.Name
+                });
+            }
+
+            return Ok(results);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<CityDto> GetCity(int id)
+        public async Task<ActionResult<CityDto>> GetCity(int id)
         {
-            var cityInfo = _citiesDataStore.Cities
-                .FirstOrDefault(c => c.Id == id);
-            
-            if(cityInfo == null)
-            {
-                return NotFound();
-            }
+            var citiEntity = await _cityInfoRepository.GetCityAsync(id, false);
+            if(citiEntity == null) { return NotFound();  }
 
-            return Ok(cityInfo);
+            var result = new CityWithoutPointsOnInterestDto()
+            {
+                Id = citiEntity.Id,
+                Description = citiEntity.Description,
+                Name = citiEntity.Name
+            };
+
+            return Ok(result);
         }
     }
 }
