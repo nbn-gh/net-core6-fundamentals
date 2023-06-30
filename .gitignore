@@ -6,3 +6,5 @@
 /CitiInfo/CitiInfo.API/obj
 /CitiInfo/.vs
 /CitiInfo/CitiInfo.API/bin/Release/net6.0
+/CitiInfo/CitiInfo.API/CityInfo.db-shm
+/CitiInfo/CitiInfo.API/CityInfo.db-wal

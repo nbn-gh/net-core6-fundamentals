@@ -1,4 +1,5 @@
-﻿using CitiInfo.API.Models;
+﻿using AutoMapper;
+using CitiInfo.API.Models;
 using CitiInfo.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
@@ -10,10 +11,12 @@ namespace CitiInfo.API.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly ICityInfoRepository _cityInfoRepository;
+        private readonly IMapper _mapper;
 
-        public CitiesController(ICityInfoRepository cityInfoRepository )
+        public CitiesController(ICityInfoRepository cityInfoRepository, IMapper mapper )
         {
             _cityInfoRepository = cityInfoRepository ?? throw new ArgumentNullException(nameof(cityInfoRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
 
@@ -21,17 +24,7 @@ namespace CitiInfo.API.Controllers
         public async Task<ActionResult<IEnumerable<CityWithoutPointsOnInterestDto>>> GetCities()
         {
             var citiEntities = await _cityInfoRepository.GetCitiesAsync();
-            var results = new List<CityWithoutPointsOnInterestDto>();
-            foreach (var citiEntity in citiEntities)
-            {
-                results.Add(new CityWithoutPointsOnInterestDto
-                {
-                    Id = citiEntity.Id,
-                    Description = citiEntity.Description,
-                    Name = citiEntity.Name
-                });
-            }
-
+            var results = _mapper.Map<IEnumerable<CityWithoutPointsOnInterestDto>>(citiEntities);
             return Ok(results);
         }
 
@@ -40,13 +33,8 @@ namespace CitiInfo.API.Controllers
         {
             var citiEntity = await _cityInfoRepository.GetCityAsync(id, false);
             if(citiEntity == null) { return NotFound();  }
-
-            var result = new CityWithoutPointsOnInterestDto()
-            {
-                Id = citiEntity.Id,
-                Description = citiEntity.Description,
-                Name = citiEntity.Name
-            };
+            
+            var result = _mapper.Map<CityDto>(citiEntity);
 
             return Ok(result);
         }
