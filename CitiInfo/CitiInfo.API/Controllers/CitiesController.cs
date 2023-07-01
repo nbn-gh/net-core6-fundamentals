@@ -13,7 +13,7 @@ namespace CitiInfo.API.Controllers
         private readonly ICityInfoRepository _cityInfoRepository;
         private readonly IMapper _mapper;
 
-        public CitiesController(ICityInfoRepository cityInfoRepository, IMapper mapper )
+        public CitiesController(ICityInfoRepository cityInfoRepository, IMapper mapper)
         {
             _cityInfoRepository = cityInfoRepository ?? throw new ArgumentNullException(nameof(cityInfoRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -29,12 +29,15 @@ namespace CitiInfo.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CityDto>> GetCity(int id)
+        public async Task<IActionResult> GetCity(int id, bool includePointsOfInterest = false)
         {
-            var citiEntity = await _cityInfoRepository.GetCityAsync(id, false);
+            var citiEntity = await _cityInfoRepository.GetCityAsync(id, includePointsOfInterest);
             if(citiEntity == null) { return NotFound();  }
-            
-            var result = _mapper.Map<CityDto>(citiEntity);
+            if (includePointsOfInterest)
+            {
+                return Ok(_mapper.Map<CityDto>(citiEntity));
+            }
+            var result = _mapper.Map<CityWithoutPointsOnInterestDto>(citiEntity);
 
             return Ok(result);
         }
