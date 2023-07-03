@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>CitiInfo.API.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +27,12 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.31.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="CityInfo.API.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
