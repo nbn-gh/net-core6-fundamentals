@@ -8,8 +8,10 @@ using System.Collections;
 namespace CitiInfo.API.Controllers
 {
     [ApiController]
-    [Route("api/cities")]
-    [Authorize]
+    [Route("api/v{version:apiVersion}/cities")]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+    //[Authorize]
     public class CitiesController : ControllerBase
     {
         private readonly ICityInfoRepository _cityInfoRepository;
