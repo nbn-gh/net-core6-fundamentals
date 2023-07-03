@@ -11,7 +11,7 @@ namespace CitiInfo.API.Controllers
     [Route("api/v{version:apiVersion}/cities/{cityId}/[controller]")]
     [ApiController]
     [ApiVersion("2.0")]
-    //[Authorize(Policy = "MustBeFromAntwrep")]
+    [Authorize(Policy = "MustBeFromAntwrep")]
     public class PointsOfInterestController : ControllerBase
     {
         private readonly ILogger<PointsOfInterestController> _logger;
