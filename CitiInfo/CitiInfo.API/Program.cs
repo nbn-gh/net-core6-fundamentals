@@ -65,6 +65,18 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
+
+// For Authorization Policy
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("MustBeFromAntwrep", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("city", "Antwrep");
+    });
+
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
